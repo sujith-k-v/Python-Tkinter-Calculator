@@ -85,7 +85,7 @@ class Calculator:
         ttk.Button(self.frame_buttons, text = '7', command = lambda: self.button_press('7')).grid(row = self.row_id, column = 0)
         ttk.Button(self.frame_buttons, text = '8', command = lambda: self.button_press('8')).grid(row = self.row_id, column = 1)
         ttk.Button(self.frame_buttons, text = '9', command = lambda: self.button_press('9')).grid(row = self.row_id, column = 2)
-        ttk.Button(self.frame_buttons, text = '/', command = lambda: self.button_press('/')).grid(row = self.row_id, column = 3)
+        ttk.Button(self.frame_buttons, text = '÷', command = lambda: self.button_press('/')).grid(row = self.row_id, column = 3)
 
         # Row 1
         self.row_id += 1
@@ -103,17 +103,17 @@ class Calculator:
         
         # Row 3
         self.row_id += 1
-        ttk.Button(self.frame_buttons, text = 'x^2', command = lambda: self.button_press('square')).grid(row = self.row_id, column = 0)
-        ttk.Button(self.frame_buttons, text = '0'  , command = lambda: self.button_press('0')).grid(row = self.row_id, column = 1) 
-        ttk.Button(self.frame_buttons, text = '.'  , command = lambda: self.button_press('.')).grid(row = self.row_id, column = 2)      
-        ttk.Button(self.frame_buttons, text = '+'  , command = lambda: self.button_press('+')).grid(row = self.row_id, column = 3)
+        ttk.Button(self.frame_buttons, text = 'x²', command = lambda: self.button_press('square')).grid(row = self.row_id, column = 0)
+        ttk.Button(self.frame_buttons, text = '0' , command = lambda: self.button_press('0')     ).grid(row = self.row_id, column = 1) 
+        ttk.Button(self.frame_buttons, text = '•' , command = lambda: self.button_press('.')     ).grid(row = self.row_id, column = 2)      
+        ttk.Button(self.frame_buttons, text = '+' , command = lambda: self.button_press('+')     ).grid(row = self.row_id, column = 3)
         
         # Row 4
         self.row_id += 1
-        ttk.Button(self.frame_buttons, text = 'sq_root', command = lambda: self.button_press('square_root')).grid(row = self.row_id, column = 0)
-        ttk.Button(self.frame_buttons, text = '('      , command = lambda: self.button_press('(')          ).grid(row = self.row_id, column = 1)
-        ttk.Button(self.frame_buttons, text = ')'      , command = lambda: self.button_press(')')          ).grid(row = self.row_id, column = 2) 
-        ttk.Button(self.frame_buttons, text = 'Ans'    , command = lambda: self.button_press('Ans')        ).grid(row = self.row_id, column = 3)
+        ttk.Button(self.frame_buttons, text = '√x' , command = lambda: self.button_press('square_root')).grid(row = self.row_id, column = 0)
+        ttk.Button(self.frame_buttons, text = '('  , command = lambda: self.button_press('(')          ).grid(row = self.row_id, column = 1)
+        ttk.Button(self.frame_buttons, text = ')'  , command = lambda: self.button_press(')')          ).grid(row = self.row_id, column = 2) 
+        ttk.Button(self.frame_buttons, text = 'Ans', command = lambda: self.button_press('Ans')        ).grid(row = self.row_id, column = 3)
         #ttk.Button(self.frame_buttons, text = '1/x'    , command = lambda: self.button_press('reciprocal') ).grid(row = self.row_id, column = 1) 
 
         # Row 5
@@ -138,7 +138,7 @@ class Calculator:
 
     def button_press(self, char):
         ''' Returns which button is pressed '''
-        self.logger.info(f"Button = {char}")
+        self.logger.info(f"Button: {char}, Expression: {self.expression.get()}")
 
         current_expr        = self.expression.get()  
         opening_brace_count = 0
@@ -176,7 +176,7 @@ class Calculator:
                 else:
                     current_expr += f"({self.result})"
             elif(char == '('):
-                if  (self.result == 0):
+                if  ((self.result == 0) and (current_expr == '')):
                     current_expr = char
                 elif(self.calculation_done):
                     current_expr = f"({self.result}"
