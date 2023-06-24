@@ -6,6 +6,7 @@ from tkinter import ttk
 class Calculator:
     def __init__(self, master):
         master.title('Calculator')
+        master.geometry("400x400")
         #master.resizable(False, False)
         master.configure(background = '#887784')
         
@@ -196,16 +197,15 @@ class Calculator:
         pass
 
     def keyboard_entry(self, event):
+        ''' Detect keyboard entries '''
         print(f"Key = {event.keysym} {event.char}")
         
         key_pressed = ''
+
         # Keyboard etry with only event.keysym and no event.char
-        if  (event.keysym == 'Return'):
-            key_pressed = '='
-        elif(event.keysym == 'BackSpace'):
-            key_pressed = 'BackSpace'
-        elif(event.keysym == 'Escape'):
-            key_pressed = 'clear'
+        if  (event.keysym == 'Return'   ):  key_pressed = '='
+        elif(event.keysym == 'BackSpace'):  key_pressed = 'BackSpace'
+        elif(event.keysym == 'Escape'   ):  key_pressed = 'clear'
 
         elif event.char and event.char in "1234567890.+-*/=()":
             key_pressed = event.char
