@@ -3,14 +3,22 @@
 from tkinter import *
 from tkinter import ttk 
 
+import logging
+import sys
+
 class Calculator:
     def __init__(self, master):
+        # Configure logger
+        self.config_logger()
+
+        # Root window
         master.title('Calculator')
         master.geometry("400x400")
         #master.resizable(False, False)
         master.configure(background = '#887784')
         
-        # The grid_rowconfigure('all', weight=1) syntax is not supported in Tkinter. The 'all' argument can ONLY be used with grid_columnconfigure.
+        # The grid_rowconfigure('all', weight=1) syntax is not supported in Tkinter. 
+        # The 'all' argument can ONLY be used with grid_columnconfigure.
         master.grid_columnconfigure(0, weight=1)
         master.grid_rowconfigure   (0, weight=1)
 
@@ -128,12 +136,13 @@ class Calculator:
 
     def button_press(self, char):
         ''' Returns which button is pressed '''
-        print(f"Button = {char}")
+        self.logger.info(f"Button = {char}")
+
         current_expr        = self.expression.get()  
         opening_brace_count = 0
         closing_brace_count = 0     
 
-        # self.calculation_done = False
+        #self.calculation_done = False
         if(current_expr != ''):            
             self.calculation_done = (current_expr[-1] == '=')
 
@@ -151,12 +160,12 @@ class Calculator:
                 self.entry_display_expression.configure(foreground='black')
             elif(char == 'square'):
                 if(self.calculation_done): 
-                    current_expr = str(self.result)
+                    current_expr = f"({self.result})"
 
                 current_expr += '**2'
             elif(char == 'square_root'):
                 if(self.calculation_done): 
-                    current_expr = str(self.result)
+                    current_expr = f"({self.result})"
 
                 current_expr += '**0.5'
             elif(char == 'Ans'):
@@ -165,7 +174,9 @@ class Calculator:
                 else:
                     current_expr += f"({self.result})"
             elif(char == '('):
-                if(self.calculation_done):
+                if  (self.result == 0):
+                    current_expr = char
+                elif(self.calculation_done):
                     current_expr = f"({self.result}"
                 else:
                     current_expr += char
@@ -185,20 +196,17 @@ class Calculator:
 
             #self.calculation_done = False
 
-            # Send it to the display
-            self.expression.set(value=current_expr)
+            self.display_expression(current_expr)
             
-        print(f"Expression = {current_expr}")
+        self.logger.info(f"Current Expression = {current_expr}")        
 
-        self.display_expression()
-
-    def display_expression(self):
-        #self.entry_display_expression.set
-        pass
+    def display_expression(self, current_expr):
+        ''' Send the expression to the display '''
+        self.expression.set(value=current_expr)
 
     def keyboard_entry(self, event):
         ''' Detect keyboard entries '''
-        print(f"Key = {event.keysym} {event.char}")
+        self.logger.info(f"Keyboard entry     = {event.keysym} {event.char}")
         
         key_pressed = ''
 
@@ -218,8 +226,9 @@ class Calculator:
         self.result = 0
         self.display_result.set(value=0)
         self.entry_display_expression.configure(foreground='black')
-        # self.calculation_done = True
-        print("Clearing outputs")
+        self.calculation_done = True
+
+        self.logger.debug("Clearing outputs")
 
     def evaluate(self):
         ''' Evaluate the result ''' 
@@ -236,9 +245,18 @@ class Calculator:
             self.entry_display_expression.configure(foreground='black')
         except:
             self.entry_display_expression.configure(foreground='red')
-            print('Invalid Entry')
+            self.logger.info('Invalid Entry')
         
-        #print(f"Result: {self.expression.get()} = {str(result)}")
+        self.logger.info(f"Result: {self.expression.get()} {str(self.result)}")
+
+    def config_logger(self):
+        # Basic logger config       
+        logging.basicConfig(filename="", 
+                            format="%(levelname)-5s: %(filename)s(Func:%(funcName)-12s, Line:%(lineno)-3d): %(message)s")
+        
+        self.logger = logging.getLogger()  # Creating an object
+        self.logger.setLevel(logging.INFO) # Setting the threshold of logger to DEBUG
+        logging.StreamHandler(sys.stdout)  # Print logging to console output as well
 
 def main():
     root = Tk()
