@@ -62,9 +62,11 @@ class Calculator:
 
         # Expression to pass on to the eval() function
         self.expression     = StringVar(value='')
-        self.display_result = DoubleVar(value=0)
+        self.display_result = DoubleVar(value=0) 
+        # Tkinter variable which helps in event handling - automatically update the Entry widget whenever the value changes. 
+        # But need to use set() and get() to assign and retrieve values.
 
-        self.result           = 0
+        self.result           = 0 # Normal python variable - easy to assign and get values
         self.calculation_done = True
 
         # Display expression
