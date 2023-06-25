@@ -220,6 +220,9 @@ class Calculator:
         elif event.char and event.char in "1234567890.+-*/=()":
             key_pressed = event.char
         
+        else: # If any other key is pressed, don't do anything 
+            return
+        
         self.button_press(key_pressed)
 
     def clear(self):
@@ -254,7 +257,7 @@ class Calculator:
     def config_logger(self):
         # Basic logger config       
         logging.basicConfig(filename="", 
-                            format="%(levelname)-5s: %(filename)s(Func:%(funcName)-12s, Line:%(lineno)-3d): %(message)s")
+                            format="%(levelname)-5s: %(filename)s(Func:%(funcName)-14s, Line:%(lineno)-3d): %(message)s")
         
         self.logger = logging.getLogger()  # Creating an object
         self.logger.setLevel(logging.INFO) # Setting the threshold of logger to DEBUG
